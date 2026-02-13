@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace TournamentsApi.Dtos;
 
@@ -22,23 +23,15 @@ public class TournamentResponseDto
 {
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
-    // Description är borttagen här för att uppfylla kravet
     public int MaxPlayers { get; set; }
     public DateTime Date { get; set; }
 }
 
-// Custom Validation Attribute för datum
+// Den här klassen låg nog under en 'using' tidigare, vilket orsakade felet
 public class FutureDateAttribute : ValidationAttribute
 {
     public override bool IsValid(object? value)
     {
         return value is DateTime dateTime && dateTime >= DateTime.Now;
-    }
-}using System;
-
-public class Class1
-{
-    public Class1()
-    {
     }
 }

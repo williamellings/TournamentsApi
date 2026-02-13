@@ -10,7 +10,10 @@ public class TournamentsController : ControllerBase
 {
     private readonly ITournamentService _service;
 
-    public TournamentsController(ITournamentService service) => _service = service;
+    public TournamentsController(ITournamentService service)
+    {
+        _service = service;
+    }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TournamentResponseDto>>> GetAll([FromQuery] string? search)

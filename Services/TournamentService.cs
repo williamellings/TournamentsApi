@@ -13,7 +13,10 @@ public class TournamentService : ITournamentService
 
     public async Task<IEnumerable<TournamentResponseDto>> GetAllAsync(string? search)
     {
-        var query = _context.Tournaments.AsQueryable();
+        
+        var query = _context.Tournaments
+            .Include(t => t.Games)
+            .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(search))
         {
@@ -25,13 +28,24 @@ public class TournamentService : ITournamentService
             Id = t.Id,
             Title = t.Title,
             MaxPlayers = t.MaxPlayers,
-            Date = t.Date
+            Date = t.Date,
+            Games = t.Games.Select(g => new GameResponseDto
+            {
+                Id = g.Id,
+                Title = g.Title,
+                Time = g.Time,
+                TournamentId = g.TournamentId
+            }).ToList()
         }).ToListAsync();
     }
 
     public async Task<TournamentResponseDto?> GetByIdAsync(int id)
     {
-        var t = await _context.Tournaments.FindAsync(id);
+        
+        var t = await _context.Tournaments
+            .Include(t => t.Games)
+            .FirstOrDefaultAsync(x => x.Id == id);
+
         if (t == null) return null;
 
         return new TournamentResponseDto
@@ -39,7 +53,14 @@ public class TournamentService : ITournamentService
             Id = t.Id,
             Title = t.Title,
             MaxPlayers = t.MaxPlayers,
-            Date = t.Date
+            Date = t.Date,
+            Games = t.Games.Select(g => new GameResponseDto
+            {
+                Id = g.Id,
+                Title = g.Title,
+                Time = g.Time,
+                TournamentId = g.TournamentId
+            }).ToList()
         };
     }
 
@@ -61,7 +82,8 @@ public class TournamentService : ITournamentService
             Id = tournament.Id,
             Title = tournament.Title,
             MaxPlayers = tournament.MaxPlayers,
-            Date = tournament.Date
+            Date = tournament.Date,
+            Games = new List<GameResponseDto>() 
         };
     }
 
@@ -75,6 +97,16 @@ public class TournamentService : ITournamentService
         tournament.MaxPlayers = dto.MaxPlayers;
         tournament.Date = dto.Date;
 
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> UpdateTitleAsync(int id, string newTitle)
+    {
+        var tournament = await _context.Tournaments.FindAsync(id);
+        if (tournament == null) return false;
+
+        tournament.Title = newTitle;
         await _context.SaveChangesAsync();
         return true;
     }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using TournamentsApi.Dtos;
 using TournamentsApi.Services;
 
@@ -10,6 +12,7 @@ public class TournamentsController : ControllerBase
 {
     private readonly ITournamentService _service;
 
+    // we inject the service layer into the controller via constructor injection, following the Dependency Injection pattern. This allows for better separation of concerns and easier testing.
     public TournamentsController(ITournamentService service)
     {
         _service = service;
@@ -29,6 +32,7 @@ public class TournamentsController : ControllerBase
     }
 
     [HttpPost]
+    [EnableRateLimiting("strict")] // Sfety measure to prevent abuse of the create endpoint
     public async Task<ActionResult<TournamentResponseDto>> Create(TournamentCreateDto dto)
     {
         var result = await _service.CreateAsync(dto);
@@ -42,7 +46,15 @@ public class TournamentsController : ControllerBase
         return success ? NoContent() : NotFound();
     }
 
+    [HttpPatch("{id}/title")] // update only the title of the tournament
+    public async Task<IActionResult> PatchTitle(int id, [FromBody] string newTitle)
+    {
+        var success = await _service.UpdateTitleAsync(id, newTitle);
+        return success ? NoContent() : NotFound();
+    }
+
     [HttpDelete("{id}")]
+    [Authorize] 
     public async Task<IActionResult> Delete(int id)
     {
         var success = await _service.DeleteAsync(id);

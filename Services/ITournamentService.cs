@@ -8,5 +8,7 @@ public interface ITournamentService
     Task<TournamentResponseDto?> GetByIdAsync(int id);
     Task<TournamentResponseDto> CreateAsync(TournamentCreateDto dto);
     Task<bool> UpdateAsync(int id, TournamentUpdateDto dto);
+
+    Task<bool> UpdateTitleAsync(int id, string newTitle);
     Task<bool> DeleteAsync(int id);
 }

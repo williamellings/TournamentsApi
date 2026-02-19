@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TournamentsApi.Data;
 
@@ -11,9 +12,11 @@ using TournamentsApi.Data;
 namespace TournamentsApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260219094043_UpdateSeedData")]
+    partial class UpdateSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,14 +53,14 @@ namespace TournamentsApi.Migrations
                         new
                         {
                             Id = 1,
-                            Time = new DateTime(2026, 3, 19, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            Time = new DateTime(2026, 3, 19, 20, 40, 42, 538, DateTimeKind.Local).AddTicks(7334),
                             Title = "Quarter finals A",
                             TournamentId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Time = new DateTime(2026, 3, 19, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            Time = new DateTime(2026, 3, 19, 22, 40, 42, 538, DateTimeKind.Local).AddTicks(7699),
                             Title = "Quarter finals B",
                             TournamentId = 1
                         });
@@ -93,7 +96,7 @@ namespace TournamentsApi.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2026, 3, 19, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2026, 3, 19, 10, 40, 42, 535, DateTimeKind.Local).AddTicks(9675),
                             Description = "Biggest Esport event in the world.",
                             MaxPlayers = 64,
                             Title = "GG Masters"

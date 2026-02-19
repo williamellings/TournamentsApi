@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
+using System.Collections.Generic;
 
 namespace TournamentsApi.Dtos;
 
@@ -25,9 +26,9 @@ public class TournamentResponseDto
     public string Title { get; set; } = string.Empty;
     public int MaxPlayers { get; set; }
     public DateTime Date { get; set; }
+    public List<GameResponseDto> Games { get; set; } = new List<GameResponseDto>();
 }
 
-// Den här klassen låg nog under en 'using' tidigare, vilket orsakade felet
 public class FutureDateAttribute : ValidationAttribute
 {
     public override bool IsValid(object? value)
